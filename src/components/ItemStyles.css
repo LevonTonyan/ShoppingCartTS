@@ -1,0 +1,19 @@
+.title-price{
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.item-title,.item-price{
+    font-weight: bold;
+    font-size: small;
+    margin:10px;
+}
+
+.btn-section{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
