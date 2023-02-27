@@ -2,12 +2,26 @@ import React from "react";
 import { Container, Navbar as NavbarBs, Nav, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import SC from "../assets/shopping_cart.svg";
-import { useShoppingCart } from "../context/shoppingCartContext";
+import { useSelector, useDispatch } from 'react-redux'
+import {toggleCart} from '../features/cart/cartSlice'
+import ShoppingCart from './ShoppingCart';
+
+import { products } from '../data1/products';
+
 
 const Navbar = () => {
-  const { openCart, closeCart, cartQuantity, isOpen } = useShoppingCart();
 
-  console.log(isOpen);
+
+
+  const dispatch = useDispatch()
+
+  const  cart   = useSelector((store) => store.cart);
+
+
+  
+  const cartQuantity = useSelector((store) => store.cart.cartItems).reduce((acc,item) => acc + item.quantity,0)
+
+
   return (
     <NavbarBs className="bg-white shadow-sm mb-3" sticky="top">
       <Container>
@@ -25,7 +39,7 @@ const Navbar = () => {
         <Button
           variant="outline-primary"
           style={{ position: "relative" }}
-          onClick={openCart}
+          onClick={() => dispatch(toggleCart(true))}
         >
           <img src={SC} />
           {cartQuantity ? (
@@ -44,6 +58,9 @@ const Navbar = () => {
             </div>
           ) : null}
         </Button>
+      
+        <ShoppingCart/>
+   
       </Container>
     </NavbarBs>
   );

@@ -124,14 +124,7 @@ export function ShoppingCartProvider({
       }}
     >
       {children}
-      {isOpen && (
-        <ShoppingCart
-                  isOpen={isOpen}
-                  closeCart={closeCart}
-                  cartItems={cartItems}
-                  items={items }
-        />
-      )}
+     
     </ShoppingCartContext.Provider>
   );
 }

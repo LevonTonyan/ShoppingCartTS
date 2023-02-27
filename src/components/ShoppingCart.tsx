@@ -1,26 +1,32 @@
 import React from 'react'
 import { Offcanvas, Stack } from 'react-bootstrap'
-import { CartItem, useShoppingCart } from '../context/shoppingCartContext'
 import { StoreItem } from '../models'
 import CartItemComp from './CartItemComp'
+import {clearCart} from '../features/cart/cartSlice.js'
+import { useSelector, useDispatch } from 'react-redux';
+import {toggleCart} from '../features/cart/cartSlice'
 
 
 
 
-type ShoppingCartProps = {
-    isOpen: boolean
-    closeCart: () => void
-    cartItems: CartItem[]
-    items:StoreItem[]
-}
 
 
 
 
-const ShoppingCart = ({ isOpen, closeCart, cartItems,items }: ShoppingCartProps) => {
+
+
+
+const ShoppingCart = () => {
+
+    const cart = useSelector(store => store.cart)
+    const products = useSelector(store => store.data.products)
+
+    const dispatch = useDispatch()
+    
+
 
   return (
-      <Offcanvas show={isOpen} onHide={closeCart } placement="end">
+      <Offcanvas show={cart.isOpen}  onHide={() => dispatch(toggleCart(false))} placement="end">
           <Offcanvas.Header closeButton >
               <Offcanvas.Title>
                   Cart
@@ -28,16 +34,17 @@ const ShoppingCart = ({ isOpen, closeCart, cartItems,items }: ShoppingCartProps)
           </Offcanvas.Header>
           <Offcanvas.Body>
               <Stack gap={3}>
-                  {cartItems.map(item => (
+                  {cart.cartItems.map((item) => (
                       <CartItemComp key={item.id} {...item} />
                   ))}
                   <div className="ms-auto fw-bold fs-5">
-                      Total: ${cartItems.reduce((total, cartItem) => {
-                          const item = items.find(i => i.id === cartItem.id)
+                      Total: ${cart.cartItems.reduce((total, cartItem) => {
+                          const item = products.find(i => i.id === cartItem.id)
                             return total +(item?.price || 0)  * cartItem.quantity
                       } ,0) }
                   </div>
               </Stack>
+              <button onClick={() => dispatch(clearCart())}>Clear Cart</button>
           </Offcanvas.Body>
     </Offcanvas>
   )

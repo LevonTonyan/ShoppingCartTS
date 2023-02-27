@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import Item from './Item';
-import { useShoppingCart } from './../context/shoppingCartContext';
+import {useDispatch,useSelector} from 'react-redux';
+import { StoreItem } from './../models';
+import { getProducts } from './../features/data/dataSlice';
 
 
 
@@ -9,14 +11,21 @@ import { useShoppingCart } from './../context/shoppingCartContext';
 
 const Store = () => {
 
-const {items} = useShoppingCart()
+  
+
+  const dispatch = useDispatch()
+  const products = useSelector(state => state.data.products)
+
+  useEffect(() => { 
+    dispatch(getProducts())
+  },[])
 
 
   return (
     <>
       <h1>Store</h1>
       <Row md={2} xs={1} lg={3} className='g-3'>
-        {items.length&&items.map(item => (
+        {products.length&&products.map((item:StoreItem) => (
           <Col key={item.id } ><Item item={item}/></Col>
         ))}
       </Row>

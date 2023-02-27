@@ -1,8 +1,8 @@
 import React from 'react'
 import { Stack } from 'react-bootstrap'
-import { CartItem } from '../context/shoppingCartContext'
-import { useShoppingCart } from '../context/shoppingCartContext'
 import { Button } from 'react-bootstrap';
+import {useDispatch, useSelector } from "react-redux"
+import { removeAllcurrItems } from '../features/cart/cartSlice';
 
 
 
@@ -13,9 +13,9 @@ type CartItemsProps = {
 
 
 const CartItemComp = ({id, quantity}:CartItemsProps) => {
-  
-const {items, removeFromCart} = useShoppingCart()
-const item = items.find(i => i.id === id)
+  const dispatch = useDispatch()
+  const products = useSelector(state => state.data.products)
+const item = products.find(i => i.id === id)
   
   if (item == null) { return null}  
   
@@ -30,7 +30,7 @@ const item = items.find(i => i.id === id)
         </div>
       </div>
       <div > total: ${item.price * quantity}</div>
-      <Button variant='outline-danger' size="sm" onClick={() => removeFromCart(item.id)}>&times;</Button>
+      <Button variant='outline-danger' size="sm" onClick={() => dispatch(removeAllcurrItems(item.id))}>&times;</Button>
     </Stack>
   )
 }
